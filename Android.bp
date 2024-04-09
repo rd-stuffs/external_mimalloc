@@ -4,11 +4,13 @@ cc_defaults {
     defaults: ["linux_bionic_supported"],
     cflags: [
         "-O3",
-        //"-DNDEBUG",
-        "-DMI_DEBUG=3",
+        "-DNDEBUG",
+        //"-DMI_DEBUG=3",
+        //"-DMI_OVERRIDE=OFF",
         "-fPIC",
         "-Wall",
         "-Wextra",
+        "-Wno-error=missing-field-initializers",
         "-fvisibility=hidden",
         "-ftls-model=initial-exec",
         "-std=gnu11",
@@ -28,8 +30,8 @@ lib_srcs = [
     "src/os.c",
     "src/bitmap.c",
     "src/arena.c",
-    "src/region.c",
     "src/segment.c",
+    "src/segment-map.c",
     "src/page.c",
     "src/alloc.c",
     "src/alloc-aligned.c",
@@ -37,6 +39,8 @@ lib_srcs = [
     "src/heap.c",
     "src/options.c",
     "src/init.c",
+    "src/libc.c",
+    "src/prim/prim.c",
 ]
 
 cc_library {
@@ -48,11 +52,14 @@ cc_library {
     native_coverage: false,
     ramdisk_available: true,
     recovery_available: true,
+    vendor_ramdisk_available: true,
     host_supported: true,
     native_bridge_supported: true,
 
     // Export headers for libc
     export_include_dirs: ["include"],
+
+    apex_available: ["com.android.runtime"],
 
     // Remove dependency on libc to break dependency cycle
     stl: "none",
@@ -62,9 +69,11 @@ cc_library {
                 enabled: false,
             },
             system_shared_libs: [],
+            header_libs: ["libc_headers"],
         },
         linux_bionic: {
             system_shared_libs: [],
+            header_libs: ["libc_headers"],
         },
     },
 }
