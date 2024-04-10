@@ -16,6 +16,10 @@ cc_defaults {
         "-ftls-model=initial-exec",
         "-std=gnu11",
 
+        //Enable full security mitigations except
+        //double free detection
+        "-DMI_SECURE=3",
+
         // From scudo
         //"-fno-stack-protector",
         "-fno-emulated-tls",
