@@ -7,6 +7,7 @@ cc_defaults {
         "-DNDEBUG",
         //"-DMI_DEBUG=3",
         //"-DMI_OVERRIDE=OFF",
+        "-DMI_NO_THP=ON",
         "-fPIC",
         "-Wall",
         "-Wextra",
